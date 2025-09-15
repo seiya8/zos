@@ -1,0 +1,191 @@
+12:36:29 FIZBUZ    MZ390 START USING z390 1.8.3 ON J2SE 17.0.16 09/15/25
+AZ390I Copyright (c) 2021 z390 Assembler LLC
+AZ390I z390 comes with ABSOLUTELY NO WARRANTY;
+AZ390I This is free software, and you are welcome to redistribute it
+AZ390I under certain conditions; see included LICENSE file for details.
+AZ390I program = /home/seiya/zos/asm/FIZBUZ
+AZ390I options = sysmac(+/usr/local/z390/mac) ..  syscpy(+/usr/local/z390/mac)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=00000140 TYPE=CST NAME=FIZBUZ
+Assembler Listing
+000000                                        (1/1)1 FIZBUZ   CSECT 
+000000                                        (1/2)2 FIZBUZ   AMODE 31
+000000                                        (1/3)3 FIZBUZ   RMODE ANY
+000000                                        (1/4)4          YREGS ,
+000000                  00000000             (2/21)5+R0       EQU   0
+000000                  00000001             (2/22)6+R1       EQU   1
+000000                  00000002             (2/23)7+R2       EQU   2
+000000                  00000003             (2/24)8+R3       EQU   3
+000000                  00000004             (2/25)9+R4       EQU   4
+000000                  00000005            (2/26)10+R5       EQU   5
+000000                  00000006            (2/27)11+R6       EQU   6
+000000                  00000007            (2/28)12+R7       EQU   7
+000000                  00000008            (2/29)13+R8       EQU   8
+000000                  00000009            (2/30)14+R9       EQU   9
+000000                  0000000A            (2/31)15+R10      EQU   10
+000000                  0000000B            (2/32)16+R11      EQU   11
+000000                  0000000C            (2/33)17+R12      EQU   12
+000000                  0000000D            (2/34)18+R13      EQU   13
+000000                  0000000E            (2/35)19+R14      EQU   14
+000000                  0000000F            (2/36)20+R15      EQU   15
+000000                                       (1/5)22 ***********************************************************************
+000000                                       (1/6)23 * PROLOG                                                              *
+000000                                       (1/7)24 ***********************************************************************
+000000 90ECD00C                              (1/8)25          STM   R14,R12,12(R13)
+000004 05C0                                  (1/9)26          BALR  R12,0
+000006                                      (1/10)27          USING *,R12
+LISTUSE FIZBUZ   ESD=0001 LOC=00000006 LEN=01000 REG=C OFF=00000 LAB=
+000006 41F0C0AA                0000B0       (1/11)28          LA    R15,SAVEAREA
+00000A 50F0D008                             (1/12)29          ST    R15,8(,R13)
+00000E 50D0C0AE                0000B4       (1/13)30          ST    R13,SAVEAREA+4
+000012 18DF                                 (1/14)31          LR    R13,R15
+000014                                      (1/15)32 ***********************************************************************
+000014                                      (1/16)33 * MAIN LOGIC                                                          *
+000014                                      (1/17)34 ***********************************************************************
+000014 41200001                             (1/18)35          LA    R2,1                      * COUNTER
+000018                                      (1/19)36          DO UNTIL=(CH,R2,GT,MAXCNT)
+000018 47F0C022                000028       (3/91)61+         B     #@DO_1_1
+00001C                                      (3/92)62+#@DO_1_T                         DS 0H
+00001C 4920C0FE                000104       (6/63)66+         CH    R2,MAXCNT
+000020 47D0C022                000028       (6/65)67+         BC    15-GT,#@IF_1_2
+000024 47F0C09C                0000A2       (3/95)69+               B     #@DO_1_E
+000028                                      (7/37)73+#@IF_1_2                                                 DS 0H
+000028                                      (3/97)75+#@DO_1_1                         DS 0H
+000028 1852                                 (1/20)77            LR  R5,R2                     * DIVIDEND
+00002A 1B44                                 (1/21)78            SR  R4,R4                     * CLEAR R4
+00002C 41300003                             (1/22)79            LA  R3,3                      * DIVISOR 3
+000030 1D43                                 (1/23)80            DR  R4,R3                     * R5 / R3
+000032 1864                                 (1/24)81            LR  R6,R4                     * SAVE REMAINDER
+000034 1852                                 (1/26)82            LR  R5,R2
+000036 1B44                                 (1/27)83            SR  R4,R4                     * CLEAR R4
+000038 41300005                             (1/28)84            LA  R3,5                      * DIVISOR 5
+00003C 1D43                                 (1/29)85            DR  R4,R3                     * R5 / R3
+00003E 1874                                 (1/30)86            LR  R7,R4                     * SAVE REMAINDER
+000040                                      (1/32)87            IF  (C,R6,EQ,ZERO),AND,(C,R7,EQ,ZERO)
+000040 5960C102                000108       (6/63)90+         C     R6,ZERO
+000044 4770C054                00005A       (6/65)91+         BC    15-EQ,#@IF_2_2
+000048 5970C102                000108       (6/63)92+         C     R7,ZERO
+00004C 4770C054                00005A       (6/65)93+         BC    15-EQ,#@IF_2_2
+000050 D207C0F6C116     0000FC 00011C       (1/33)95              MVC  WTOTEXT(8),FIZZBUZZ
+000056                                      (1/34)96            ELSEIF  (C,R6,EQ,ZERO)
+000056 47F0C08E                000094       (8/40)99+         B     #@IF_2_E
+00005A                                     (8/41)100+#@IF_2_2                                                 DS 0H
+00005A 5960C102                000108      (8/64)101+         C     R6,ZERO
+00005E 4770C066                00006C      (8/66)102+         BC    15-EQ,#@IF_2_4
+000062 D207C0F6C106     0000FC 00010C      (1/35)104              MVC  WTOTEXT(8),FIZZ
+000068                                     (1/36)105            ELSEIF  (C,R7,EQ,ZERO)
+000068 47F0C08E                000094      (8/40)108+         B     #@IF_2_E
+00006C                                     (8/41)109+#@IF_2_4                                                 DS 0H
+00006C 5970C102                000108      (8/64)110+         C     R7,ZERO
+000070 4770C078                00007E      (8/66)111+         BC    15-EQ,#@IF_2_6
+000074 D207C0F6C10E     0000FC 000114      (1/37)113              MVC  WTOTEXT(8),BUZZ
+00007A                                     (1/38)114            ELSE 
+00007A 47F0C08E                000094      (9/56)117+        B      #@IF_2_E
+00007E                                     (9/57)118+#@IF_2_6                                                 DS 0H
+00007E 4E20C12A                000130      (1/39)120              CVD  R2,PACKAREA            * BINARY TO PACK
+000082 D207C132C11E     000138 000124      (1/40)121              MVC  CHRAREA,EDITMASK
+000088 DE07C132C12E     000138 000134      (1/41)122              ED   CHRAREA,PACKAREA+4     * PACK TO ZONE
+00008E D207C0F6C132     0000FC 000138      (1/42)123              MVC  WTOTEXT(8),CHRAREA
+000094                                     (1/43)124            ENDIF 
+000094                                     (7/40)127+#@IF_2_E                         DS 0H
+000094                                     (1/44)129            WTO  MF=(E,WTOBLOCK)
+000094 4110C0F2                0000F8     (10/77)130+         LA    1,WTOBLOCK
+000098 0A23                               (10/82)131+         SVC   35
+00009A A72A0001                            (1/45)133            AHI R2,1
+00009E                                     (1/46)134          ENDDO 
+00009E 47F0C016                00001C      (3/71)138+         B     #@DO_1_T
+0000A2                                     (3/72)139+#@DO_1_E                         DS 0H
+0000A2                                     (1/47)142 ***********************************************************************
+0000A2                                     (1/48)143 * EPILOG                                                              *
+0000A2                                     (1/49)144 ***********************************************************************
+0000A2 58D0C0AE                0000B4      (1/50)145 RETURN   L     R13,SAVEAREA+4
+0000A6 98ECD00C                            (1/51)146          LM    R14,R12,12(R13)
+0000AA A7F80000                            (1/52)147          LHI   R15,0
+0000AE 07FE                                (1/53)148          BR    R14
+0000B0                                     (1/54)149 ***********************************************************************
+0000B0                                     (1/55)150 * STATIC AREA                                                         *
+0000B0                                     (1/56)151 ***********************************************************************
+0000B0                                     (1/57)152 SAVEAREA DS    18F
+0000F8                                     (1/58)153          LTORG ,
+0000F8                                     (1/59)154          DS    0H
+0000F8                  000000F8           (1/60)155 WTOBLOCK EQU   *
+0000F8 000C                                (1/61)156          DC    H'12'
+0000FA 0000                                (1/62)157          DC    H'0'
+0000FC 4040404040404040                    (1/63)158 WTOTEXT  DC    CL8' '
+000104 001E                                (1/64)159 MAXCNT   DC    H'30'
+000108 00000000                            (1/65)160 ZERO     DC    F'0'
+00010C 40404040C6C9E9E9                    (1/66)161 FIZZ     DC    CL8'    FIZZ'
+000114 40404040C2E4E9E9                    (1/67)162 BUZZ     DC    CL8'    BUZZ'
+00011C C6C9E9E9C2E4E9E9                    (1/68)163 FIZZBUZZ DC    CL8'FIZZBUZZ'
+000124 4020202020202120                    (1/69)164 EDITMASK DC    XL8'4020202020202120'
+000130                                     (1/70)165 PACKAREA DS    D
+000138                                     (1/71)166 CHRAREA  DS    CL8
+000140                                     (1/72)167          END 
+.Symbol Table Listing.
+ SYM=#@DO_1_1 LOC=00000028 LEN=00000002 ESD=0001 TYPE=REL  XREF=75 61 
+ SYM=#@DO_1_E LOC=000000A2 LEN=00000002 ESD=0001 TYPE=REL  XREF=139 69 
+ SYM=#@DO_1_T LOC=0000001C LEN=00000002 ESD=0001 TYPE=REL  XREF=62 138 
+ SYM=#@IF_1_2 LOC=00000028 LEN=00000002 ESD=0001 TYPE=REL  XREF=73 67 
+ SYM=#@IF_2_2 LOC=0000005A LEN=00000002 ESD=0001 TYPE=REL  XREF=100 91 93 
+ SYM=#@IF_2_4 LOC=0000006C LEN=00000002 ESD=0001 TYPE=REL  XREF=109 102 
+ SYM=#@IF_2_6 LOC=0000007E LEN=00000002 ESD=0001 TYPE=REL  XREF=118 111 
+ SYM=#@IF_2_E LOC=00000094 LEN=00000002 ESD=0001 TYPE=REL  XREF=127 99 108 117 
+ SYM=BUZZ     LOC=00000114 LEN=00000008 ESD=0001 TYPE=REL  XREF=162 113 
+ SYM=CHRAREA  LOC=00000138 LEN=00000008 ESD=0001 TYPE=REL  XREF=166 121 122 123 
+ SYM=E        LOC=00000008 LEN=00000001 ESD=0000 TYPE=ABS  XREF=42 
+ SYM=EDITMASK LOC=00000124 LEN=00000008 ESD=0001 TYPE=REL  XREF=164 121 
+ SYM=EQ       LOC=00000008 LEN=00000001 ESD=0000 TYPE=ABS  XREF=54 91 93 102 111 
+ SYM=FIZBUZ   LOC=00000000 LEN=00000140 ESD=0001 TYPE=CST  XREF=1 
+ SYM=FIZZ     LOC=0000010C LEN=00000008 ESD=0001 TYPE=REL  XREF=161 104 
+ SYM=FIZZBUZZ LOC=0000011C LEN=00000008 ESD=0001 TYPE=REL  XREF=163 95 
+ SYM=GE       LOC=0000000B LEN=00000001 ESD=0000 TYPE=ABS  XREF=57 
+ SYM=GT       LOC=00000002 LEN=00000001 ESD=0000 TYPE=ABS  XREF=55 67 
+ SYM=H        LOC=00000002 LEN=00000001 ESD=0000 TYPE=ABS  XREF=40 
+ SYM=L        LOC=00000004 LEN=00000001 ESD=0000 TYPE=ABS  XREF=41 
+ SYM=LE       LOC=0000000D LEN=00000001 ESD=0000 TYPE=ABS  XREF=58 
+ SYM=LT       LOC=00000004 LEN=00000001 ESD=0000 TYPE=ABS  XREF=56 
+ SYM=M        LOC=00000004 LEN=00000001 ESD=0000 TYPE=ABS  XREF=48 
+ SYM=MAXCNT   LOC=00000104 LEN=00000002 ESD=0001 TYPE=REL  XREF=159 66 
+ SYM=NE       LOC=00000007 LEN=00000001 ESD=0000 TYPE=ABS  XREF=45 
+ SYM=NH       LOC=0000000D LEN=00000001 ESD=0000 TYPE=ABS  XREF=43 
+ SYM=NL       LOC=0000000B LEN=00000001 ESD=0000 TYPE=ABS  XREF=44 
+ SYM=NM       LOC=0000000B LEN=00000001 ESD=0000 TYPE=ABS  XREF=51 
+ SYM=NO       LOC=0000000E LEN=00000001 ESD=0000 TYPE=ABS  XREF=53 
+ SYM=NP       LOC=0000000D LEN=00000001 ESD=0000 TYPE=ABS  XREF=50 
+ SYM=NZ       LOC=00000007 LEN=00000001 ESD=0000 TYPE=ABS  XREF=52 
+ SYM=O        LOC=00000001 LEN=00000001 ESD=0000 TYPE=ABS  XREF=46 
+ SYM=P        LOC=00000002 LEN=00000001 ESD=0000 TYPE=ABS  XREF=47 
+ SYM=PACKAREA LOC=00000130 LEN=00000008 ESD=0001 TYPE=REL  XREF=165 120 122 
+ SYM=R0       LOC=00000000 LEN=00000001 ESD=0000 TYPE=ABS  XREF=5 
+ SYM=R10      LOC=0000000A LEN=00000001 ESD=0000 TYPE=ABS  XREF=15 
+ SYM=R1       LOC=00000001 LEN=00000001 ESD=0000 TYPE=ABS  XREF=6 
+ SYM=R11      LOC=0000000B LEN=00000001 ESD=0000 TYPE=ABS  XREF=16 
+ SYM=R12      LOC=0000000C LEN=00000001 ESD=0000 TYPE=ABS  XREF=17 25 26 27 146 
+ SYM=R13      LOC=0000000D LEN=00000001 ESD=0000 TYPE=ABS  XREF=18 25 29 30 31 145 
+  146 
+ SYM=R14      LOC=0000000E LEN=00000001 ESD=0000 TYPE=ABS  XREF=19 25 146 148 
+ SYM=R15      LOC=0000000F LEN=00000001 ESD=0000 TYPE=ABS  XREF=20 28 29 31 147 
+ SYM=R2       LOC=00000002 LEN=00000001 ESD=0000 TYPE=ABS  XREF=7 35 66 77 82 120 
+  133 
+ SYM=R3       LOC=00000003 LEN=00000001 ESD=0000 TYPE=ABS  XREF=8 79 80 84 85 
+ SYM=R4       LOC=00000004 LEN=00000001 ESD=0000 TYPE=ABS  XREF=9 78 80 81 83 85 
+  86 
+ SYM=R5       LOC=00000005 LEN=00000001 ESD=0000 TYPE=ABS  XREF=10 77 82 
+ SYM=R6       LOC=00000006 LEN=00000001 ESD=0000 TYPE=ABS  XREF=11 81 90 101 
+ SYM=R7       LOC=00000007 LEN=00000001 ESD=0000 TYPE=ABS  XREF=12 86 92 110 
+ SYM=R8       LOC=00000008 LEN=00000001 ESD=0000 TYPE=ABS  XREF=13 
+ SYM=R9       LOC=00000009 LEN=00000001 ESD=0000 TYPE=ABS  XREF=14 
+ SYM=RETURN   LOC=000000A2 LEN=00000004 ESD=0001 TYPE=REL  XREF=145 
+ SYM=SAVEAREA LOC=000000B0 LEN=00000004 ESD=0001 TYPE=REL  XREF=152 28 30 145 
+ SYM=WTOBLOCK LOC=000000F8 LEN=00000001 ESD=0001 TYPE=REL  XREF=155 130 
+ SYM=WTOTEXT  LOC=000000FC LEN=00000008 ESD=0001 TYPE=REL  XREF=158 95 104 113 123 
+ SYM=Z        LOC=00000008 LEN=00000001 ESD=0000 TYPE=ABS  XREF=49 
+ SYM=ZERO     LOC=00000108 LEN=00000004 ESD=0001 TYPE=REL  XREF=160 90 92 101 110 
+.Literal Table Listing.
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+12:36:30 FIZBUZ    MZ390 ENDED   RC= 0 SEC= 0 MEM(MB)= 75 IO=1226

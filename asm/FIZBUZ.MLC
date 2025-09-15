@@ -1,0 +1,72 @@
+FIZBUZ   CSECT
+FIZBUZ   AMODE 31
+FIZBUZ   RMODE ANY
+         YREGS ,
+***********************************************************************
+* PROLOG                                                              *
+***********************************************************************
+         STM   R14,R12,12(R13)
+         BALR  R12,0
+         USING *,R12
+         LA    R15,SAVEAREA
+         ST    R15,8(,R13)
+         ST    R13,SAVEAREA+4
+         LR    R13,R15
+***********************************************************************
+* MAIN LOGIC                                                          *
+***********************************************************************
+         LA    R2,1                      * COUNTER
+         DO UNTIL=(CH,R2,GT,MAXCNT)
+           LR  R5,R2                     * DIVIDEND
+           SR  R4,R4                     * CLEAR R4
+           LA  R3,3                      * DIVISOR 3
+           DR  R4,R3                     * R5 / R3
+           LR  R6,R4                     * SAVE REMAINDER
+
+           LR  R5,R2
+           SR  R4,R4                     * CLEAR R4
+           LA  R3,5                      * DIVISOR 5
+           DR  R4,R3                     * R5 / R3
+           LR  R7,R4                     * SAVE REMAINDER
+
+           IF  (C,R6,EQ,ZERO),AND,(C,R7,EQ,ZERO)
+             MVC  WTOTEXT(8),FIZZBUZZ
+           ELSEIF  (C,R6,EQ,ZERO)
+             MVC  WTOTEXT(8),FIZZ
+           ELSEIF  (C,R7,EQ,ZERO)
+             MVC  WTOTEXT(8),BUZZ
+           ELSE
+             CVD  R2,PACKAREA            * BINARY TO PACK
+             MVC  CHRAREA,EDITMASK
+             ED   CHRAREA,PACKAREA+4     * PACK TO ZONE
+             MVC  WTOTEXT(8),CHRAREA
+           ENDIF
+           WTO  MF=(E,WTOBLOCK)
+           AHI R2,1
+         ENDDO
+***********************************************************************
+* EPILOG                                                              *
+***********************************************************************
+RETURN   L     R13,SAVEAREA+4
+         LM    R14,R12,12(R13)
+         LHI   R15,0
+         BR    R14
+***********************************************************************
+* STATIC AREA                                                         *
+***********************************************************************
+SAVEAREA DS    18F
+         LTORG ,                
+         DS    0H                   
+WTOBLOCK EQU   *
+         DC    H'12'                
+         DC    H'0'                  
+WTOTEXT  DC    CL8' '
+MAXCNT   DC    H'30'
+ZERO     DC    F'0'
+FIZZ     DC    CL8'    FIZZ'
+BUZZ     DC    CL8'    BUZZ'
+FIZZBUZZ DC    CL8'FIZZBUZZ'
+EDITMASK DC    XL8'4020202020202120'
+PACKAREA DS    D
+CHRAREA  DS    CL8
+         END
