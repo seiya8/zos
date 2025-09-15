@@ -1,0 +1,55 @@
+TIMES    CSECT
+TIMES    AMODE 31
+TIMES    RMODE ANY
+         YREGS ,
+***********************************************************************
+* PROLOG                                                              *
+***********************************************************************
+         STM   R14,R12,12(R13)
+         BALR  R12,0
+         USING *,R12
+         LA    R15,SAVEAREA
+         ST    R15,8(,R13)
+         ST    R13,SAVEAREA+4
+         LR    R13,R15
+***********************************************************************
+* MAIN LOGIC                                                          *
+***********************************************************************
+         LA    R2,1
+         DO  UNTIL=(CH,R2,GT,=H'9')
+           LA  R6,LINEBUF
+           LA  R3,1                       * MULTIPLIER
+           DO  UNTIL=(CH,R3,GT,=H'9')
+             SR  R4,R4                    * CLEAR HIGH HALF
+             LR  R5,R2                    * MULTIPLICAND
+             MR  R4,R3                    * (R4 R5) = R5 * R3
+             CVD  R5,PACKAREA             * BINARY TO PACK
+             MVC  CHRAREA,EDITMASK
+             ED   CHRAREA,PACKAREA+6      * PACK TO ZONE
+             MVC  0(3,R6),CHRAREA+1       * COPY TO LINEBUF
+             LA   R6,3(R6)                * PROCEED 3 BYTES
+             AHI  R3,1
+           ENDDO
+           WTO  MF=(E,WTOBLOCK)
+           AHI R2,1
+         ENDDO
+***********************************************************************
+* EPILOG                                                              *
+***********************************************************************
+RETURN   L     R13,SAVEAREA+4
+         LM    R14,R12,12(R13)
+         LHI   R15,0
+         BR    R14
+***********************************************************************
+* STATIC AREA                                                         *
+***********************************************************************
+SAVEAREA DS    18F
+         LTORG ,
+WTOBLOCK EQU   *
+         DC    H'31'
+         DC    H'0'
+LINEBUF  DS    CL27
+EDITMASK DC    XL4'40202020'
+PACKAREA DS    D
+CHRAREA  DS    CL4
+         END
