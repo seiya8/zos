@@ -51,15 +51,18 @@ OTFILE   DCB   DDNAME=OTFILE,                                          X
                BLKSIZE=132,                                            X
                LRECL=132,                                              X
                DSORG=PS
+*
 INAREA   DS    0CL80
 LAST     DS    CL15
 SALARY   DS    CL5
          DS    CL60
+*
 OTAREA   DS    0CL132
          DS    CL5
 LNAME    DS    CL15
          DS    CL20
 SALOUT   DS    CL5
          DS    CL87
+*
          LTORG
          END
